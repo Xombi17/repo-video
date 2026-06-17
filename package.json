@@ -1,10 +1,10 @@
 {
   "name": "repovideo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An autonomous developer video producer CLI and agent skill.",
-  "main": "bin/repovideo.py",
+  "main": "bin/repovideo.js",
   "bin": {
-    "repovideo": "./bin/repovideo.py"
+    "repovideo": "./bin/repovideo.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0"
