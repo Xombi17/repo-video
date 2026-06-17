@@ -53,13 +53,37 @@ function initializeSkill(targetDir = '.') {
     // Copy templates
     copyDirSync(TEMPLATES_DIR, path.join(repovideoDir, 'templates'));
     
-    // Copy SKILL.md to workspace root
-    fs.copyFileSync(path.join(BASE_DIR, 'SKILL.md'), path.join(absoluteTarget, 'SKILL.md'));
+    // Define target paths for SKILL.md copy to be picked up by various agents
+    const skillDestinations = [
+      path.join(absoluteTarget, '.claude', 'skills', 'repovideo', 'SKILL.md'),
+      path.join(absoluteTarget, '.agents', 'skills', 'repovideo', 'SKILL.md'),
+      path.join(absoluteTarget, '.gemini', 'config', 'skills', 'repovideo', 'SKILL.md'),
+      path.join(absoluteTarget, '.planning', 'skills', 'repovideo', 'SKILL.md')
+    ];
+
+    const sourceSkill = path.join(BASE_DIR, 'SKILL.md');
+    let skillAdded = false;
+
+    for (const dest of skillDestinations) {
+      try {
+        fs.mkdirSync(path.dirname(dest), { recursive: true });
+        fs.copyFileSync(sourceSkill, dest);
+        console.log(`   - Saved skill to: ${path.relative(absoluteTarget, dest)}`);
+        skillAdded = true;
+      } catch (e) {
+        // Suppress errors if a specific directory cannot be created
+      }
+    }
     
     // Create local bin wrapper or links if needed
     console.log(`\n✅ Skill initialized successfully!`);
     console.log(`   - Created .repovideo/ directory with internal generator scripts.`);
-    console.log(`   - Added SKILL.md to workspace root. Any AI agent opened in this directory can now run repovideo workflows!`);
+    if (skillAdded) {
+      console.log(`   - Configured SKILL.md in agent directories (.claude, .agents, .gemini, .planning).`);
+      console.log(`   - Any AI agent opened in this directory can now run repovideo workflows!`);
+    } else {
+      console.log(`   - Note: Could not write SKILL.md. Please check folder permissions.`);
+    }
   } catch (err) {
     console.error(`❌ Error initializing skill:`, err);
   }
