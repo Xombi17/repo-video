@@ -13,7 +13,7 @@ def main():
         description="repovideo CLI - Universal Autonomous AI Video Producer Tool",
         usage="repovideo <command> [<args>]"
     )
-    parser.add_argument("command", help="Subcommand to run (analyze, voice, record, stitch)")
+    parser.add_argument("command", help="Subcommand to run (analyze, voice, record, stitch, auto)")
     
     # Parse the command first
     args = parser.parse_known_args(sys.argv[1:2])
@@ -38,6 +38,10 @@ def main():
         
     elif cmd_name == "stitch":
         script_path = os.path.join(SCRIPTS_DIR, "stitch.py")
+        subprocess.run([sys.executable, script_path] + cmd_args)
+        
+    elif cmd_name == "auto":
+        script_path = os.path.join(SCRIPTS_DIR, "auto_generator.py")
         subprocess.run([sys.executable, script_path] + cmd_args)
         
     else:
