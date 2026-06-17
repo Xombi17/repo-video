@@ -8,7 +8,7 @@ import subprocess
 import time
 from analyze import analyze_directory
 
-GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash:generateContent"
 
 def call_gemini(prompt, api_key):
     url = f"{GEMINI_API_URL}?key={api_key}"
