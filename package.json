@@ -1,0 +1,27 @@
+{
+  "name": "repovideo",
+  "version": "1.0.0",
+  "description": "An autonomous developer video producer CLI and agent skill.",
+  "main": "bin/repovideo.py",
+  "bin": {
+    "repovideo": "./bin/repovideo.py"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "keywords": [
+    "cli",
+    "video",
+    "developer",
+    "agent-skill",
+    "ai",
+    "playwright",
+    "tts",
+    "ffmpeg"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.40.0"
+  }
+}
