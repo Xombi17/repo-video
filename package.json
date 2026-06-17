@@ -1,6 +1,6 @@
 {
   "name": "repovideo",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "An autonomous developer video producer CLI and agent skill.",
   "main": "bin/repovideo.js",
   "bin": {
