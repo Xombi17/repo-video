@@ -56,6 +56,18 @@ function initializeSkill(targetDir = '.', isGlobal = false) {
     // Copy templates
     copyDirSync(TEMPLATES_DIR, path.join(repovideoDir, 'templates'));
     
+    // Pre-install Remotion boilerplate dependencies
+    const boilerplatePath = path.join(repovideoDir, 'templates', 'remotion-boilerplate');
+    if (fs.existsSync(boilerplatePath)) {
+      console.log(`📦  Installing Remotion dependencies inside boilerplate...`);
+      try {
+        execSync('npm install --no-audit --no-fund', { cwd: boilerplatePath, stdio: 'inherit' });
+        console.log(`✅  Remotion dependencies installed successfully!`);
+      } catch (err) {
+        console.warn(`⚠️  Warning: Could not automatically run 'npm install' inside boilerplate: ${err.message}`);
+      }
+    }
+
     // Define target paths for SKILL.md copy to be picked up by various agents
     const skillDestinations = [
       path.join(baseFolder, '.claude', 'skills', 'repovideo', 'SKILL.md'),
