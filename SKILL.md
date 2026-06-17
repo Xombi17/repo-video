@@ -1,5 +1,5 @@
 ---
-name: ai-video-generator
+name: repovideo
 description: Autonomous developer video producer skill to scan codebases, generate scripts, synthesize voiceovers, record UI flows via Playwright, and stitch them.
 ---
 

@@ -55,7 +55,7 @@ npm install -g repovideo
 
 ### 2. Auto-generate the Video with an AI Agent
 If the user is using an AI coding assistant (like Antigravity or Claude Code) inside their project, they can simply type:
-> *"Hey, use the `ai-video-generator` skill to create a 1-minute demo video of my landing page."*
+> *"Hey, use the `repovideo` skill to create a 1-minute demo video of my landing page."*
 
 The AI agent will:
 1. Scan their code layout: `repovideo analyze .`
