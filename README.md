@@ -25,45 +25,53 @@
 
 ---
 
-## 🚀 Installation
+## 🚀 Installation & Agent Skill Setup
 
-Install `repovideo` globally via npm:
+You can install `repovideo` globally as a CLI or load it directly as a skill for your AI Coding Assistant (e.g. Claude Code, Copilot, Cursor, Windsurf, Gemini CLI, etc.):
 
+### Option A: Install via the Skills Package Manager (Recommended)
+Add `repovideo` directly as a capability to your AI coding agent environment using the agent skills CLI:
+```bash
+npx skills add Xombi17/repo-video
+```
+
+### Option B: Global NPM CLI Install
+Install `repovideo` globally on your machine:
 ```bash
 npm install -g repovideo
 ```
+
+Then, initialize the AI agent skill configuration in your workspace directory or globally:
+```bash
+# Initialize locally for the current repository
+npx repovideo init --local
+
+# Initialize globally for all projects (installs in user home directory)
+npx repovideo init --global
+```
+*This command automatically populates the required scripts and registers `SKILL.md` inside your agent configuration directories (supporting `.claude`, `.agents`, `.gemini`, `.planning`, `.cursorrules`, `.windsurfrules`, and `.github/copilot-instructions.md`).*
 
 ---
 
 ## 💻 How to Use
 
 ### Method A: Automated Run via AI Agents
-If you are using an AI coding assistant (like Antigravity, Claude Code, or Gemini CLI) in your project workspace, you can simply instruct the agent to run the video generation skill. The agent will read [SKILL.md](file:///home/varad/Documents/himshikhar/ai-video-generator-skill/SKILL.md) and handle all step executions automatically.
+If you are using an AI coding assistant in your project workspace, you can simply instruct the agent to run the video generation skill. The agent will read `SKILL.md` and handle all step executions automatically.
 
 ### Method B: Manual CLI Usage
 You can execute each step manually using the CLI commands:
 
-#### Step 1: Scan target codebase
-Scan your project directories to determine the configuration setup:
 ```bash
+# Step 1: Scan target codebase
 repovideo analyze .
-```
 
-#### Step 2: Generate narration audio clips
-Provide a JSON script file mapping text parameters to audio output destinations:
-```bash
+# Step 2: Generate narration audio clips from script JSON
 repovideo voice --script-json voiceover.json --out-dir output_voiceovers
-```
 
-#### Step 3: Record UI walkthrough
-Provide a JSON action file detailing page loads, clicks, scrolls, and typing configurations to record a headless user walkthrough:
-```bash
+# Step 3: Record UI walkthrough from actions JSON
 repovideo record actions.json 1280 720 output_recordings
-```
 
-#### Step 4: Stitch media files
-Mix the voiceover narration, raw browser recording, and optional background music track together:
-```bash
+# Step 4: Stitch narration tracks, screen capture and background music
 repovideo stitch \
   --video output_recordings/recording_123.webm \
   --audio-list-file list.txt \
