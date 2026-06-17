@@ -4,7 +4,7 @@
   "description": "An autonomous developer video producer CLI and agent skill.",
   "main": "bin/repovideo.js",
   "bin": {
-    "repovideo": "./bin/repovideo.js"
+    "repovideo": "bin/repovideo.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0"
