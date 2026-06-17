@@ -242,8 +242,10 @@ if (args.length === 0) {
     runScript("stitch.py", cmdArgs);
   } else if (cmd === 'auto') {
     runScript("auto_generator.py", cmdArgs);
+  } else if (cmd === 'clone') {
+    runScript("openvoice_generator.py", cmdArgs);
   } else {
     console.log(`Unknown command: ${cmd}`);
-    console.log("Usage: npx repovideo [init [--global | -g] | analyze | voice | record | stitch | auto]");
+    console.log("Usage: npx repovideo [init [--global | -g] | analyze | voice | record | stitch | auto | clone]");
   }
 }

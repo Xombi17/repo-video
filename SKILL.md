@@ -46,9 +46,15 @@ Create a `video_script.json` file in the workspace containing the voiceover layo
 Synthesize the narration text segments into MP3 audio files using the `edge-tts` CLI tool.
 Use a clean neural voice (e.g., `en-US-BrianNeural` or `en-US-AndrewNeural`).
 
-#### Command Format:
+#### Option A: Standard Synthesis (edge-tts)
 ```bash
 edge-tts --text "Your narration text here" --voice en-US-BrianNeural --write-media public/vo_1.mp3
+```
+
+#### Option B: Cloned Voice Synthesis (OpenVoice)
+If the user provides a speaker reference clip (e.g. `reference.wav`), first synthesize the base audio using Option A, and then clone the speaker tone color:
+```bash
+repovideo clone --source public/vo_1.mp3 --reference reference.wav --output public/vo_1_cloned.mp3 --checkpoints path_to_checkpoints
 ```
 *Loop through all segments in `video_script.json` to generate their matching audio assets.*
 
