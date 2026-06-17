@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const { spawn, execSync } = require('child_process');
 const readline = require('readline');
 
@@ -38,13 +39,15 @@ function copyDirSync(src, dest) {
   }
 }
 
-// Function to initialize skill in current directory
-function initializeSkill(targetDir = '.') {
+// Function to initialize skill (locally or globally)
+function initializeSkill(targetDir = '.', isGlobal = false) {
   const absoluteTarget = path.resolve(targetDir);
-  console.log(`\n⚙️  Initializing repovideo skill in: ${absoluteTarget}`);
+  const baseFolder = isGlobal ? os.homedir() : absoluteTarget;
+  
+  console.log(`\n⚙️  Initializing repovideo skill ${isGlobal ? 'GLOBALLY' : 'LOCALLY'} in: ${baseFolder}`);
 
-  // Create .repovideo directory
-  const repovideoDir = path.join(absoluteTarget, '.repovideo');
+  // Create .repovideo directory in the target base (either project root or user home directory)
+  const repovideoDir = path.join(baseFolder, '.repovideo');
   
   try {
     // Copy scripts
@@ -55,10 +58,10 @@ function initializeSkill(targetDir = '.') {
     
     // Define target paths for SKILL.md copy to be picked up by various agents
     const skillDestinations = [
-      path.join(absoluteTarget, '.claude', 'skills', 'repovideo', 'SKILL.md'),
-      path.join(absoluteTarget, '.agents', 'skills', 'repovideo', 'SKILL.md'),
-      path.join(absoluteTarget, '.gemini', 'config', 'skills', 'repovideo', 'SKILL.md'),
-      path.join(absoluteTarget, '.planning', 'skills', 'repovideo', 'SKILL.md')
+      path.join(baseFolder, '.claude', 'skills', 'repovideo', 'SKILL.md'),
+      path.join(baseFolder, '.agents', 'skills', 'repovideo', 'SKILL.md'),
+      path.join(baseFolder, '.gemini', 'config', 'skills', 'repovideo', 'SKILL.md'),
+      path.join(baseFolder, '.planning', 'skills', 'repovideo', 'SKILL.md')
     ];
 
     const sourceSkill = path.join(BASE_DIR, 'SKILL.md');
@@ -68,18 +71,17 @@ function initializeSkill(targetDir = '.') {
       try {
         fs.mkdirSync(path.dirname(dest), { recursive: true });
         fs.copyFileSync(sourceSkill, dest);
-        console.log(`   - Saved skill to: ${path.relative(absoluteTarget, dest)}`);
+        console.log(`   - Saved skill configuration to: ${path.relative(baseFolder, dest)}`);
         skillAdded = true;
       } catch (e) {
         // Suppress errors if a specific directory cannot be created
       }
     }
     
-    // Create local bin wrapper or links if needed
     console.log(`\n✅ Skill initialized successfully!`);
-    console.log(`   - Created .repovideo/ directory with internal generator scripts.`);
+    console.log(`   - Created ${isGlobal ? '~' : ''}/.repovideo/ directory with internal generator scripts.`);
     if (skillAdded) {
-      console.log(`   - Configured SKILL.md in agent directories (.claude, .agents, .gemini, .planning).`);
+      console.log(`   - Configured SKILL.md in agent directories (${isGlobal ? 'global' : 'local'} .claude, .agents, .gemini, .planning).`);
       console.log(`   - Any AI agent opened in this directory can now run repovideo workflows!`);
     } else {
       console.log(`   - Note: Could not write SKILL.md. Please check folder permissions.`);
@@ -109,7 +111,11 @@ async function launchWizard() {
 
   switch (choice) {
     case '1':
-      initializeSkill();
+      console.log("\nChoose Scope:");
+      console.log("  [1] Local (only for this repository)");
+      console.log("  [2] Global (for all projects via home directory)");
+      const scopeChoice = await prompt("Select scope (1-2): ");
+      initializeSkill('.', scopeChoice === '2');
       break;
     case '2':
       let apiKey = process.env.GEMINI_API_KEY;
@@ -177,7 +183,10 @@ const args = process.argv.slice(2);
 if (args.length === 0) {
   launchWizard();
 } else if (args[0] === 'init') {
-  initializeSkill(args[1] || '.');
+  const isGlobal = args.includes('--global') || args.includes('-g');
+  const cleanArgs = args.filter(a => a !== 'init' && a !== '--global' && a !== '-g' && a !== '--local' && a !== '-l');
+  const target = cleanArgs[0] || '.';
+  initializeSkill(target, isGlobal);
 } else {
   // Direct CLI command routing
   const cmd = args[0];
@@ -194,6 +203,6 @@ if (args.length === 0) {
     runScript("auto_generator.py", cmdArgs);
   } else {
     console.log(`Unknown command: ${cmd}`);
-    console.log("Usage: npx repovideo [init | analyze | voice | record | stitch | auto]");
+    console.log("Usage: npx repovideo [init [--global | -g] | analyze | voice | record | stitch | auto]");
   }
 }

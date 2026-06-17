@@ -12,7 +12,7 @@ This skill allows an AI Agent to autonomously scan a codebase and generate a hig
 ### 1. Codebase Discovery
 Run the analyzer tool on the workspace root to understand the framework, run scripts, and local endpoints:
 ```bash
-repovideo analyze .
+python3 scripts/analyze.py .
 ```
 
 ### 2. Scripting & Timeline Planning
@@ -41,19 +41,19 @@ Draft a structured sequence of slides and application demo phases. Create a time
 ### 3. Generate Audio Narrations
 Run the voice synthesizer using edge-tts:
 ```bash
-repovideo voice --script-json voiceover.json --out-dir demo_voiceovers
+python3 scripts/tts_generator.py --script-json voiceover.json --out-dir demo_voiceovers
 ```
 
 ### 4. Headless UI Interaction Recording
 First, launch the local development server in the background (detected in the Discovery phase). Once running, execute the recording tool:
 ```bash
-repovideo record actions.json 1280 720 ./demo_recordings
+node scripts/record.js actions.json 1280 720 ./demo_recordings
 ```
 
 ### 5. Media Assembly & Stitching
 Combine all components into a final production-ready demo video:
 ```bash
-repovideo stitch \
+python3 scripts/stitch.py \
   --video demo_recordings/recording_XXXXX.webm \
   --audio-list-file list.txt \
   --output final_demo.mp4
