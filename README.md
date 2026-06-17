@@ -1,5 +1,9 @@
 # 🎬 repovideo
 
+[![npm version](https://img.shields.io/npm/v/repovideo.svg?style=flat-square)](https://www.npmjs.com/package/repovideo)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+
 `repovideo` is an autonomous developer video producer CLI tool and AI agent skill. It automatically scans a codebase, drafts a timed walkthrough script, synthesizes high-fidelity voice narration, performs automated browser recording, and stitches the assets into a professional demo video complete with technical transition slides.
 
 ---
@@ -25,9 +29,7 @@
 
 ---
 
-## 🚀 Installation & Agent Skill Setup
-
-You can install `repovideo` globally as a CLI or load it directly as a skill for your AI Coding Assistant (e.g. Claude Code, Copilot, Cursor, Windsurf, Gemini CLI, etc.):
+## 🚀 Quick Start & Installation
 
 ### Option A: Install via the Skills Package Manager (Recommended)
 Add `repovideo` directly as a capability to your AI coding agent environment using the agent skills CLI:
@@ -36,57 +38,62 @@ npx skills add Xombi17/repo-video
 ```
 
 ### Option B: Global NPM CLI Install
-Install `repovideo` globally on your machine:
+Install the CLI tool globally on your system:
 ```bash
 npm install -g repovideo
 ```
 
-Then, initialize the AI agent skill configuration in your workspace directory or globally:
+Once installed globally, bootstrap the AI agent skill configuration inside your project repository or globally:
 ```bash
 # Initialize locally for the current repository
-npx repovideo init --local
+repovideo init --local
 
 # Initialize globally for all projects (installs in user home directory)
-npx repovideo init --global
+repovideo init --global
 ```
 *This command automatically populates the required scripts and registers `SKILL.md` inside your agent configuration directories (supporting `.claude`, `.agents`, `.gemini`, `.planning`, `.cursorrules`, `.windsurfrules`, and `.github/copilot-instructions.md`).*
 
 ---
 
-## 💻 How to Use
+## 💻 Usage & Workflows
 
 ### Method A: Automated Run via AI Agents
-If you are using an AI coding assistant in your project workspace, you can simply instruct the agent to run the video generation skill. The agent will read `SKILL.md` and handle all step executions automatically.
+If you are using an AI coding assistant (like Claude Code or Cursor) in your project workspace, you can simply instruct the agent to run the video generation skill:
+> *"Hey, run the repovideo skill to generate a 1-minute walkthrough video of my application."*
 
-### Method B: Manual CLI Usage
-You can execute each step manually using the CLI commands:
+The agent will read the configured skill instructions and handle all step executions automatically on the fly.
 
+### Method B: Interactive CLI Wizard
+Simply run the wrapper command to launch the terminal-based interactive GUI wizard:
 ```bash
-# Step 1: Scan target codebase
-repovideo analyze .
-
-# Step 2: Generate narration audio clips from script JSON
-repovideo voice --script-json voiceover.json --out-dir output_voiceovers
-
-# Step 3: Record UI walkthrough from actions JSON
-repovideo record actions.json 1280 720 output_recordings
-
-# Step 4: Stitch narration tracks, screen capture and background music
-repovideo stitch \
-  --video output_recordings/recording_123.webm \
-  --audio-list-file list.txt \
-  --bg-music ambient_loop.mp3 \
-  --bg-volume 0.1 \
-  --output final_demo.mp4
+repovideo
 ```
+This will launch a prompt select menu to let you run the steps manually, initialize skills, or run the autonomous script generator.
 
 ---
 
-## 📁 Repository Structure
-* **`bin/`**: Core CLI command wrapper entries.
+## ⚙️ Manual Commands
+
+If you prefer to run individual pipeline steps manually via terminal scripts:
+
+| Command | Action | Arguments |
+| :--- | :--- | :--- |
+| `repovideo analyze` | Scan codebase setup | `[path_to_project]` (default: `.`) |
+| `repovideo voice` | Generate speech files | `--script-json <path> --out-dir <output_dir>` |
+| `repovideo record` | Record browser interactions | `<actions_json_file> [width] [height] [out_dir]` |
+| `repovideo stitch` | Mix and stitch media | `--video <file> --audio-list-file <file> --output <file>` |
+| `repovideo clone` | Tone voice cloning (OpenVoice) | `--source <file> --reference <file> --output <file>` |
+| `repovideo auto` | Run full pipeline autonomously | `[path_to_project]` (requires `GEMINI_API_KEY`) |
+
+---
+
+## 📁 Repository Directory Structure
+
+* **`bin/`**: Core CLI wrapper entry points.
 * **`scripts/`**: Tool modules:
   * `analyze.py`: Python codebase scanner utility.
   * `tts_generator.py`: TTS narration audio synthesizer.
+  * `openvoice_generator.py`: OpenVoice speaker tone color cloner.
   * `record.js`: Playwright automated UI recording engine.
   * `stitch.py`: FFmpeg stitcher and audio ducking mixer.
 * **`templates/`**: Boilerplate React/Remotion timeline configurations.
