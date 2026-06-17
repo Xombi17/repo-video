@@ -1,0 +1,40 @@
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Cache directories
+__pycache__/
+*.pyc
+.pytest_cache/
+.eslintcache
+.cache/
+
+# Project dependencies
+node_modules/
+jspm_packages/
+web_modules/
+
+# Local outputs/recordings generated during runs
+demo_voiceovers/
+demo_recordings/
+out/
+*.mp4
+*.webm
+*.mp3
+temp_audio_list.txt
+temp_voiceover.mp3
+
+# Build & System files
+dist/
+build/
+.next/
+.docusaurus/
+.DS_Store
+Thumbs.db
+
+# Agent planning & local logs
+.plans/
+.system_generated/
+*.log
