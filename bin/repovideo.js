@@ -77,6 +77,35 @@ function initializeSkill(targetDir = '.', isGlobal = false) {
         // Suppress errors if a specific directory cannot be created
       }
     }
+
+    // Define target rule files for Cursor, Windsurf, and GitHub Copilot
+    const ruleFiles = [
+      path.join(baseFolder, '.cursorrules'),
+      path.join(baseFolder, '.windsurfrules'),
+      path.join(baseFolder, '.github', 'copilot-instructions.md')
+    ];
+
+    const skillContent = fs.readFileSync(sourceSkill, 'utf8');
+
+    for (const ruleFile of ruleFiles) {
+      try {
+        fs.mkdirSync(path.dirname(ruleFile), { recursive: true });
+        if (fs.existsSync(ruleFile)) {
+          const existing = fs.readFileSync(ruleFile, 'utf8');
+          if (!existing.includes('repovideo')) {
+            fs.appendFileSync(ruleFile, `\n\n${skillContent}`);
+            console.log(`   - Appended skill instructions to: ${path.relative(baseFolder, ruleFile)}`);
+            skillAdded = true;
+          }
+        } else {
+          fs.writeFileSync(ruleFile, skillContent);
+          console.log(`   - Created rules file with skill instructions: ${path.relative(baseFolder, ruleFile)}`);
+          skillAdded = true;
+        }
+      } catch (e) {
+        // Suppress errors
+      }
+    }
     
     console.log(`\n✅ Skill initialized successfully!`);
     console.log(`   - Created ${isGlobal ? '~' : ''}/.repovideo/ directory with internal generator scripts.`);
